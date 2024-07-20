@@ -1,0 +1,9 @@
+   # Игнорируем файлы и каталоги IntelliJ IDEA
+   .idea/
+   *.iml
+   out/
+   *.class
+   *.jar
+   *.war
+   *.ear
+   *.log
