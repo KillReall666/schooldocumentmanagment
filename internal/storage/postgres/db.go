@@ -1,13 +1,15 @@
 package postgres
 
 import (
-	"KillReall666/schooldocumentmanagment.git/internal/model"
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"time"
+
+	"KillReall666/schooldocumentmanagment.git/internal/model"
 )
 
 type Database struct {
@@ -54,7 +56,7 @@ func (d *Database) CreatePublication(ctx context.Context, ID uuid.UUID, Material
 	return nil
 }
 
-func (d *Database) ReadMaterialByUUID(ctx context.Context, UUID string) (*model.Publication, error) {
+func (d *Database) ReadPublicationByUUID(ctx context.Context, UUID string) (*model.Publication, error) {
 	var data model.Publication
 	readQuery := `SELECT id AS uuid, material_type, status, title, content, created_at, updated_at FROM publications WHERE id = $1`
 
@@ -67,7 +69,7 @@ func (d *Database) ReadMaterialByUUID(ctx context.Context, UUID string) (*model.
 	return &data, nil
 }
 
-func (d *Database) ReadAllMaterialByUUID(ctx context.Context) ([]*model.Publication, error) {
+func (d *Database) ReadAllPublicationsByUUID(ctx context.Context) ([]*model.Publication, error) {
 	var data []*model.Publication
 
 	readAllQuery := `SELECT id, material_type, title, created_at, updated_at from publications`
@@ -94,7 +96,7 @@ func (d *Database) ReadAllMaterialByUUID(ctx context.Context) ([]*model.Publicat
 
 }
 
-func (d *Database) UpdateMaterialByUUID(ctx context.Context, publications model.Publication) error {
+func (d *Database) UpdatePublicationByUUID(ctx context.Context, publications model.Publication) error {
 	tx, err := d.db.BeginTx(ctx, pgx.TxOptions{})
 	if err != nil {
 		return fmt.Errorf("error starting transaction: %v", err)

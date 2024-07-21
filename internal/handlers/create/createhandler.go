@@ -1,17 +1,18 @@
 package create
 
 import (
-	"KillReall666/schooldocumentmanagment.git/internal/model"
 	"context"
 	"encoding/json"
-	"fmt"
-	"github.com/google/uuid"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/google/uuid"
+
+	"KillReall666/schooldocumentmanagment.git/internal/model"
 )
 
-//go:generate go run github.com/vektra/mockery/v2@v2.43.2 --name=materialCreater
+//go:generate go run github.com/vektra/mockery/v2@v2.43.2 --name=publicationCreater
 type publicationCreater interface {
 	CreatePublication(ctx context.Context, ID uuid.UUID, MaterialType string, Status string, Title string, Content string, CreatedAt time.Time, UpdatedAt time.Time) error
 }
@@ -30,10 +31,12 @@ func NewCreateHandler(create publicationCreater) *publicationCreateHandler {
 func (h *publicationCreateHandler) Create(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Only POST method is supported", http.StatusMethodNotAllowed)
+		return
 	}
 
 	var publication model.CreatePublication
-	ctx := r.Context()
+	ctx := context.Background()
+
 	unmarshalData, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -45,8 +48,14 @@ func (h *publicationCreateHandler) Create(w http.ResponseWriter, r *http.Request
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	if err = ValidatePublication(publication); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	newUUID := uuid.New()
-	fmt.Println(publication.MaterialType, publication.Status)
+
 	err = h.publicationCreate.CreatePublication(ctx, newUUID, publication.MaterialType, publication.Status, publication.Title, publication.Content, publication.CreatedAt, publication.UpdatedAt)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

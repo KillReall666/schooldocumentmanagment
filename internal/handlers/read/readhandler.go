@@ -1,35 +1,37 @@
 package read
 
 import (
-	"KillReall666/schooldocumentmanagment.git/internal/model"
 	"context"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
+
+	"KillReall666/schooldocumentmanagment.git/internal/model"
 )
 
-type materialReader interface {
-	ReadMaterialByUUID(ctx context.Context, UUID string) (*model.Publication, error)
+//go:generate go run github.com/vektra/mockery/v2@v2.43.2 --name=publicationReader
+type publicationReader interface {
+	ReadPublicationByUUID(ctx context.Context, UUID string) (*model.Publication, error)
 }
 
-type materialReadHandler struct {
-	materialRead materialReader
+type publicationReadHandler struct {
+	publicationRead publicationReader
 }
 
-func NewCreateHandler(create materialReader) *materialReadHandler {
-	return &materialReadHandler{
-		materialRead: create,
+func NewReadHandler(create publicationReader) *publicationReadHandler {
+	return &publicationReadHandler{
+		publicationRead: create,
 	}
 }
 
-func (h *materialReadHandler) Read(w http.ResponseWriter, r *http.Request) {
+func (h *publicationReadHandler) Read(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "only POST method is supported", http.StatusMethodNotAllowed)
 	}
 
 	var UUIDString string
-	ctx := r.Context()
+	ctx := context.Background()
 
 	data, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -45,7 +47,7 @@ func (h *materialReadHandler) Read(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	publication, err := h.materialRead.ReadMaterialByUUID(ctx, UUIDString)
+	publication, err := h.publicationRead.ReadPublicationByUUID(ctx, UUIDString)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		log.Println("error reading material:", err)

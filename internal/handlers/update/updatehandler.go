@@ -1,35 +1,37 @@
 package update
 
 import (
-	"KillReall666/schooldocumentmanagment.git/internal/model"
 	"context"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
+
+	"KillReall666/schooldocumentmanagment.git/internal/model"
 )
 
-type materialUpdater interface {
-	UpdateMaterialByUUID(ctx context.Context, publications model.Publication) error
+//go:generate go run github.com/vektra/mockery/v2@v2.43.2 --name=publicationUpdater
+type publicationUpdater interface {
+	UpdatePublicationByUUID(ctx context.Context, publications model.Publication) error
 }
 
-type materialUpdateHandler struct {
-	materialUpdate materialUpdater
+type publicationUpdateHandler struct {
+	publicationUpdate publicationUpdater
 }
 
-func NewUpdateHandler(update materialUpdater) *materialUpdateHandler {
-	return &materialUpdateHandler{
-		materialUpdate: update,
+func NewUpdateHandler(update publicationUpdater) *publicationUpdateHandler {
+	return &publicationUpdateHandler{
+		publicationUpdate: update,
 	}
 }
 
-func (h *materialUpdateHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *publicationUpdateHandler) Update(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "only POST method is supported", http.StatusMethodNotAllowed)
 	}
 
 	var publication model.Publication
-	ctx := r.Context()
+	ctx := context.Background()
 
 	data, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -45,7 +47,7 @@ func (h *materialUpdateHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.materialUpdate.UpdateMaterialByUUID(ctx, publication)
+	err = h.publicationUpdate.UpdatePublicationByUUID(ctx, publication)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		log.Println("error reading material:", err)

@@ -1,13 +1,6 @@
 package main
 
 import (
-	"KillReall666/schooldocumentmanagment.git/internal/config"
-	"KillReall666/schooldocumentmanagment.git/internal/handlers/create"
-	"KillReall666/schooldocumentmanagment.git/internal/handlers/read"
-	"KillReall666/schooldocumentmanagment.git/internal/handlers/readall"
-	"KillReall666/schooldocumentmanagment.git/internal/handlers/update"
-	"KillReall666/schooldocumentmanagment.git/internal/service"
-	"KillReall666/schooldocumentmanagment.git/internal/storage/postgres"
 	"context"
 	"golang.org/x/sync/errgroup"
 	"log"
@@ -15,6 +8,14 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	"KillReall666/schooldocumentmanagment.git/internal/config"
+	"KillReall666/schooldocumentmanagment.git/internal/handlers/create"
+	"KillReall666/schooldocumentmanagment.git/internal/handlers/read"
+	"KillReall666/schooldocumentmanagment.git/internal/handlers/readall"
+	"KillReall666/schooldocumentmanagment.git/internal/handlers/update"
+	"KillReall666/schooldocumentmanagment.git/internal/service"
+	"KillReall666/schooldocumentmanagment.git/internal/storage/postgres"
 )
 
 func main() {
@@ -45,9 +46,9 @@ func main() {
 	}
 
 	http.HandleFunc("/create", create.NewCreateHandler(serv).Create)
-	http.HandleFunc("/read", read.NewCreateHandler(serv).Read)
+	http.HandleFunc("/read", read.NewReadHandler(serv).Read)
 	http.HandleFunc("/update", update.NewUpdateHandler(serv).Update)
-	http.HandleFunc("/readall", readall.NewCreateHandler(serv).ReadAll)
+	http.HandleFunc("/readall", readall.NewAllPublicationsHandler(serv).ReadAll)
 
 	log.Println("Starting server on", httpServer.Addr)
 

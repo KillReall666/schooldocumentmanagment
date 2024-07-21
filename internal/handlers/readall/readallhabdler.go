@@ -1,35 +1,37 @@
 package readall
 
 import (
-	"KillReall666/schooldocumentmanagment.git/internal/model"
 	"context"
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"KillReall666/schooldocumentmanagment.git/internal/model"
 )
 
-type materialAllReader interface {
-	ReadAllMaterialByUUID(ctx context.Context) ([]*model.Publication, error)
+//go:generate go run github.com/vektra/mockery/v2@v2.43.2 --name=allPublicationsReader
+type allPublicationsReader interface {
+	ReadAllPublicationsByUUID(ctx context.Context) ([]*model.Publication, error)
 }
 
-type materialAllReadHandler struct {
-	materialAllRead materialAllReader
+type allPublicationsReadHandler struct {
+	allPublicationsRead allPublicationsReader
 }
 
-func NewCreateHandler(create materialAllReader) *materialAllReadHandler {
-	return &materialAllReadHandler{
-		materialAllRead: create,
+func NewAllPublicationsHandler(create allPublicationsReader) *allPublicationsReadHandler {
+	return &allPublicationsReadHandler{
+		allPublicationsRead: create,
 	}
 }
 
-func (h *materialAllReadHandler) ReadAll(w http.ResponseWriter, r *http.Request) {
+func (h *allPublicationsReadHandler) ReadAll(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "only POST method is supported", http.StatusMethodNotAllowed)
 	}
 
-	ctx := r.Context()
+	ctx := context.Background()
 
-	publication, err := h.materialAllRead.ReadAllMaterialByUUID(ctx)
+	publication, err := h.allPublicationsRead.ReadAllPublicationsByUUID(ctx)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		log.Println("error reading material:", err)
