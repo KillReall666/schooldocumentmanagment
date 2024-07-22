@@ -3,18 +3,16 @@ package create
 import (
 	"context"
 	"encoding/json"
+	"github.com/google/uuid"
 	"io"
 	"net/http"
-	"time"
 
-	"github.com/google/uuid"
-
-	"KillReall666/schooldocumentmanagment.git/internal/model"
+	"github.com/KillReall666/schooldocumentmanagment/internal/model"
 )
 
 //go:generate go run github.com/vektra/mockery/v2@v2.43.2 --name=publicationCreater
 type publicationCreater interface {
-	CreatePublication(ctx context.Context, ID uuid.UUID, MaterialType string, Status string, Title string, Content string, CreatedAt time.Time, UpdatedAt time.Time) error
+	CreatePublication(ctx context.Context, ID uuid.UUID, material model.CreatePublication) error
 }
 
 type publicationCreateHandler struct {
@@ -56,7 +54,7 @@ func (h *publicationCreateHandler) Create(w http.ResponseWriter, r *http.Request
 
 	newUUID := uuid.New()
 
-	err = h.publicationCreate.CreatePublication(ctx, newUUID, publication.MaterialType, publication.Status, publication.Title, publication.Content, publication.CreatedAt, publication.UpdatedAt)
+	err = h.publicationCreate.CreatePublication(ctx, newUUID, publication)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

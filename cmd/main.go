@@ -9,13 +9,13 @@ import (
 	"os/signal"
 	"syscall"
 
-	"KillReall666/schooldocumentmanagment.git/internal/config"
-	"KillReall666/schooldocumentmanagment.git/internal/handlers/create"
-	"KillReall666/schooldocumentmanagment.git/internal/handlers/read"
-	"KillReall666/schooldocumentmanagment.git/internal/handlers/readall"
-	"KillReall666/schooldocumentmanagment.git/internal/handlers/update"
-	"KillReall666/schooldocumentmanagment.git/internal/service"
-	"KillReall666/schooldocumentmanagment.git/internal/storage/postgres"
+	"github.com/KillReall666/schooldocumentmanagment/internal/config"
+	"github.com/KillReall666/schooldocumentmanagment/internal/handlers/create"
+	"github.com/KillReall666/schooldocumentmanagment/internal/handlers/read"
+	"github.com/KillReall666/schooldocumentmanagment/internal/handlers/readall"
+	"github.com/KillReall666/schooldocumentmanagment/internal/handlers/update"
+	"github.com/KillReall666/schooldocumentmanagment/internal/service"
+	"github.com/KillReall666/schooldocumentmanagment/internal/storage/postgres"
 )
 
 func main() {

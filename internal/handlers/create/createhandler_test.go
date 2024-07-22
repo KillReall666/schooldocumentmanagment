@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 	"time"
-	
+
 	"github.com/stretchr/testify/mock"
 
-	"KillReall666/schooldocumentmanagment.git/internal/handlers/create/mocks"
-	"KillReall666/schooldocumentmanagment.git/internal/model"
+	"github.com/KillReall666/schooldocumentmanagment/internal/handlers/create/mocks"
+	"github.com/KillReall666/schooldocumentmanagment/internal/model"
 )
 
 type MockResponseWriter struct {

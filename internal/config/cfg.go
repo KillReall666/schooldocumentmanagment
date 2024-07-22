@@ -13,7 +13,7 @@ type Config struct {
 
 const (
 	defaultServer = "localhost:8080"
-	defaultDBPath = ""
+	defaultDBPath = "host=localhost port=5432 user=Mr8 password=Rammstein12! dbname=school_db sslmode=disable"
 )
 
 func New() (*Config, error) {

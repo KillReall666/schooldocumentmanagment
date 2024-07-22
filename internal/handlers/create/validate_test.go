@@ -3,7 +3,7 @@ package create
 import (
 	"testing"
 
-	"KillReall666/schooldocumentmanagment.git/internal/model"
+	"github.com/KillReall666/schooldocumentmanagment/internal/model"
 )
 
 func TestValidatePublication(t *testing.T) {

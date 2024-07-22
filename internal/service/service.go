@@ -2,32 +2,27 @@ package service
 
 import (
 	"context"
-	"time"
-
 	"github.com/google/uuid"
 
-	"KillReall666/schooldocumentmanagment.git/internal/config"
-	"KillReall666/schooldocumentmanagment.git/internal/model"
-	"KillReall666/schooldocumentmanagment.git/internal/storage/postgres"
+	"github.com/KillReall666/schooldocumentmanagment/internal/config"
+	"github.com/KillReall666/schooldocumentmanagment/internal/model"
+	"github.com/KillReall666/schooldocumentmanagment/internal/storage/postgres"
 )
 
 type service struct {
 	cfg *config.Config
-	db  *postgres.Database
+	db  postgres.PublicationsRepository
 }
 
-type Service interface {
-}
-
-func New(cfg *config.Config, db *postgres.Database) *service {
+func New(cfg *config.Config, db postgres.PublicationsRepository) *service {
 	return &service{
 		cfg: cfg,
 		db:  db,
 	}
 }
 
-func (s *service) CreatePublication(ctx context.Context, ID uuid.UUID, MaterialType string, Status string, Title string, Content string, CreatedAt time.Time, UpdatedAt time.Time) error {
-	err := s.db.CreatePublication(ctx, ID, MaterialType, Status, Title, Content, CreatedAt, UpdatedAt)
+func (s *service) CreatePublication(ctx context.Context, ID uuid.UUID, material model.CreatePublication) error {
+	err := s.db.CreatePublication(ctx, ID, material)
 	if err != nil {
 		return err
 	}

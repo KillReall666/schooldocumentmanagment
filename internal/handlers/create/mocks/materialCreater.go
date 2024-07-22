@@ -3,6 +3,7 @@
 package mocks
 
 import (
+	"github.com/KillReall666/schooldocumentmanagment/internal/model"
 	context "context"
 
 	mock "github.com/stretchr/testify/mock"
@@ -19,9 +20,9 @@ type publicationCreater struct {
 
 
 
-// CreatePublication provides a mock function with given fields: ctx, ID, MaterialType, Status, Title, Content, CreatedAt, UpdatedAt
-func (_m *publicationCreater) CreatePublication(ctx context.Context, ID uuid.UUID, MaterialType string, Status string, Title string, Content string, CreatedAt time.Time, UpdatedAt time.Time) error {
-	ret := _m.Called(ctx, ID, MaterialType, Status, Title, Content, CreatedAt, UpdatedAt)
+// CreatePublication provides a mock function with given fields: ctx, ID, model.CreatePublication
+func (_m *publicationCreater) CreatePublication(ctx context.Context, ID uuid.UUID, material model.CreatePublication) error {
+	ret := _m.Called(ctx, ID, material.MaterialType, material.Status, material.Title, material.Content, material.CreatedAt, material.UpdatedAt)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreatePublication")
@@ -29,7 +30,7 @@ func (_m *publicationCreater) CreatePublication(ctx context.Context, ID uuid.UUI
 
 	var r0 error
 	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string, string, string, time.Time, time.Time) error); ok {
-		r0 = rf(ctx, ID, MaterialType, Status, Title, Content, CreatedAt, UpdatedAt)
+		r0 = rf(ctx, ID, material.MaterialType, material.Status, material.Title, material.Content, material.CreatedAt, material.UpdatedAt)
 	} else {
 		r0 = ret.Error(0)
 	}

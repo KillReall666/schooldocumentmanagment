@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"KillReall666/schooldocumentmanagment.git/internal/model"
+	"github.com/KillReall666/schooldocumentmanagment/internal/model"
 )
 
 //go:generate go run github.com/vektra/mockery/v2@v2.43.2 --name=publicationUpdater

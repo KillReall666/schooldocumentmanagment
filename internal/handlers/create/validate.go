@@ -3,7 +3,7 @@ package create
 import (
 	"errors"
 
-	"KillReall666/schooldocumentmanagment.git/internal/model"
+	"github.com/KillReall666/schooldocumentmanagment/internal/model"
 )
 
 func ValidatePublication(pub model.CreatePublication) error {

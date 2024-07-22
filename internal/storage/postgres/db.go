@@ -9,8 +9,15 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"KillReall666/schooldocumentmanagment.git/internal/model"
+	"github.com/KillReall666/schooldocumentmanagment/internal/model"
 )
+
+type PublicationsRepository interface {
+	CreatePublication(ctx context.Context, ID uuid.UUID, material model.CreatePublication) error
+	ReadPublicationByUUID(ctx context.Context, UUID string) (*model.Publication, error)
+	ReadAllPublicationsByUUID(ctx context.Context) ([]*model.Publication, error)
+	UpdatePublicationByUUID(ctx context.Context, publications model.Publication) error
+}
 
 type Database struct {
 	db *pgxpool.Pool
@@ -43,13 +50,15 @@ func New(connString string) (*Database, error) {
 	return &Database{db: conn}, nil
 }
 
-func (d *Database) CreatePublication(ctx context.Context, ID uuid.UUID, MaterialType string, Status string, Title string, Content string, CreatedAt time.Time, UpdatedAt time.Time) error {
+//TODO: по хорошему вынести коннект с базой в отдельный пакет, и сделать мини-репозетории для работы с пользователем, публикациями итд.
+
+func (d *Database) CreatePublication(ctx context.Context, ID uuid.UUID, material model.CreatePublication) error {
 	createQuery := `INSERT INTO publications (id, material_type, status, title, content, created_at, updated_at) 
 					VALUES ($1, $2, $3, $4, $5, $6, $7);`
 	createdAt := time.Now().UTC()
 	moscowTime, err := time.LoadLocation("Europe/Moscow")
 
-	_, err = d.db.Exec(ctx, createQuery, ID, MaterialType, Status, Title, Content, createdAt.In(moscowTime), UpdatedAt)
+	_, err = d.db.Exec(ctx, createQuery, ID, material.MaterialType, material.Status, material.Title, material.Content, createdAt.In(moscowTime), material.UpdatedAt)
 	if err != nil {
 		return fmt.Errorf("error creating publication: %v", err)
 	}

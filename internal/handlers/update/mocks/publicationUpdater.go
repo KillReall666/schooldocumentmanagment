@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	model "KillReall666/schooldocumentmanagment.git/internal/model"
+	model "github.com/KillReall666/schooldocumentmanagment/internal/model"
 	context "context"
 
 	mock "github.com/stretchr/testify/mock"

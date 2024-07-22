@@ -1,4 +1,4 @@
-module KillReall666/schooldocumentmanagment.git
+module github.com/KillReall666/schooldocumentmanagment
 
 go 1.22.2
 
